@@ -84,10 +84,16 @@ module SassC
       ].freeze
 
       PREFIXS = [ "", "_" ]
+      NODE_PACKAGE_PREFIX = /\A~(.*)\z/
       GLOB = /(\A|\/)(\*|\*\*\/\*)\z/
 
       def imports(path, parent_path)
         parent_dir, _ = File.split(parent_path)
+
+        if n = path.match(NODE_PACKAGE_PREFIX)
+          path = n[1]
+        end
+
         specified_dir, specified_file = File.split(path)
 
         if m = path.match(GLOB)
